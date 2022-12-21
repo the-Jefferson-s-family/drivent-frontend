@@ -5,27 +5,35 @@ import UntouriedPayment from './UntourizedPayment';
 import UntouriedTicket from './UntourizedTicket';
 import ChooseHotel from './ chooseHotel';
 import { useEffect, useState } from 'react';
+import useToken from '../../../hooks/useToken';
 
 export default function Hotel() {
-  const [hotel, setHotel] = useState ([]);
-  //resolver o loop
-  // useEffect(() => {
-  //   console.log('passando');
-  //   hotelApi.getHotel().then((e) => {
-  //     console.log('deu bom', e);
-  //   }).catch((e) => {
-  //     console.log('deu ruim', e);
-  //   });
-  // }, []);
+  const [hotels, setHotels] = useState ([]);
+  const [hotelsWithRooms, setHotelsWithRooms] = useState([]);
+  let token = useToken();
 
-  hotelApi.getHotel().then((e) => {
-    setHotel(e);
-  }).catch((e) => {
-    console.log('catcchhhhhh');//tratar o erro
-  });
+  useEffect(async() => {
+    try {
+      const hotelsList = await hotelApi.getHotels(token);
+      setHotels(hotelsList);
+      await organizeHotelsWithRooms(token, hotelsList);
+    } catch (e) {
+    };
+  }, []);
 
-  return (<>
-    <StyledTypography variant="h4">Escolha de hotel e quarto</StyledTypography>
-    <ChooseHotel hotel={hotel}/>
-  </>);
+  async function organizeHotelsWithRooms(token, hotelList) {
+    let list = [];
+    for (let i = 0; i < hotelList.length; i++) {
+      const request = await hotelApi.getRoomsByHotelId(token, hotelList[i].id);
+      list.push(request);
+    }
+    setHotelsWithRooms([...list]);
+  };
+  
+  return (
+    <>
+      <StyledTypography variant="h4">Escolha de hotel e quarto</StyledTypography>
+      <ChooseHotel hotels={hotelsWithRooms}/>
+    </>
+  );
 }
