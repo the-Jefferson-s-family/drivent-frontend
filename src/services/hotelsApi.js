@@ -1,8 +1,6 @@
-import useToken from '../hooks/useToken';
 import api from './api';
 
-export async function getHotel() {
-  const token = useToken();
+export async function getHotels(token) {
   const response = await api.get('/hotels', {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -11,8 +9,28 @@ export async function getHotel() {
   return response.data;
 }
 
+export async function getRoomsByHotelId(token, hotelId) {
+  const response = await api.get(`/hotels/${hotelId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+}
+
+export async function getBookinsByRoomId(token, roomId) {
+  const response = await api.get(`/booking/${roomId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+}
+
 const hotelApi={
-  getHotel,
+  getHotels,
+  getRoomsByHotelId,
+  getBookinsByRoomId
 };
 
 export default hotelApi;
