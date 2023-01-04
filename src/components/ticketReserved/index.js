@@ -23,7 +23,7 @@ export default function CreditCardPage({ ticketName, ticketPrice, ticketId, setP
           number: form.number,
           name: form.name,
           expirationDate: form.expiry,
-          cvv: 123
+          cvv: form.cvc
         }
       };
       await payRoute(formToPay);

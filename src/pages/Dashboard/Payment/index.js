@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import useEnrollment from '../../../hooks/api/useEnrollment';
 import useGetTicket from '../../../hooks/api/useTicket';
 import PaymentCompletePage from '../../../components/paymentComplete';
-import NeedEnrollmentPage from '../../../components/CannotChooseTicket';
+import ErrorPage from '../../../components/CannotChooseTicket';
 import CreditCardPage from '../../../components/ticketReserved';
 import { useState } from 'react';
 
@@ -43,6 +43,6 @@ export default function Payment() {
     return 'Comprar Ticket: Em breve!';
   }
   return (
-    <NeedEnrollmentPage />
+    <ErrorPage message1={'Você precisa completar sua inscrição'} message2={'antes de prosseguir pra escolha de ingresso'}/>
   );
 }

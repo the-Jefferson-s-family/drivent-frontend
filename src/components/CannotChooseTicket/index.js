@@ -1,13 +1,13 @@
 import Typography from '@material-ui/core/Typography';
 import styled from 'styled-components';
 
-export default function NeedEnrollmentPage() {
+export default function ErrorPage({ message1, message2 }) {
   return (
     <>
       <StyledTypography variant="h4">Ingresso e pagamento</StyledTypography>
       <StyledDiv>
-        <p>Você precisa completar sua inscrição</p> 
-        <p>antes de prosseguir pra escolha de ingresso</p>
+        <p>{message1}</p> 
+        <p>{message2}</p>
       </StyledDiv>
     </>
   );
