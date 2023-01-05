@@ -2,11 +2,19 @@ import styled from 'styled-components';
 import Typography from '@material-ui/core/Typography';
 import { useState, useEffect } from 'react';
 import useGetTicketTypes from '../../hooks/api/useTicketTypes';
+import OnlineType from './onlineType';
+import PresentialType from './presentialType';
 
 export default function ChooseTicketPage() {
   const { ticketTypes } = useGetTicketTypes();
-  const [selectedTicket, setSelectedTicket] = useState('');
+  const [selectedTicket, setSelectedTicket] = useState();
+  const [selectedTicketType, setSelectedTicketType] = useState('');
   const [ticketTypesData, setTicketTypesData] = useState();
+
+  function toggleTicket(  type, ticket  ) {
+    setSelectedTicketType(type);
+    setSelectedTicket(ticket);
+  }
 
   useEffect(() => {
     if(ticketTypes) {
@@ -25,13 +33,13 @@ export default function ChooseTicketPage() {
           {ticketTypesData.map((type, index) =>
             type.isRemote ? (
 
-              <TicketBox isSelected={selectedTicket === 'online' ? true : false}  onClick={e => setSelectedTicket('online')} key={index}>
+              <TicketBox isSelected={selectedTicketType === 'online' ? true : false}  onClick={e => toggleTicket('online', type)} key={index}>
                 <BoxSelectionTitle>{type.name}</BoxSelectionTitle>
                 <BoxSelectionPrice>{type.price}</BoxSelectionPrice>
               </TicketBox>
 
             ) : !type.isRemote && type.includesHotel  ? (
-              <TicketBox isSelected={selectedTicket === 'pressencial' ? true : false} onClick={e => setSelectedTicket('pressencial')} >
+              <TicketBox isSelected={selectedTicketType === 'pressencial' ? true : false} onClick={e => toggleTicket('pressencial', type)} >
                 <BoxSelectionTitle>{type.name}</BoxSelectionTitle>
                 <BoxSelectionPrice>{type.price}</BoxSelectionPrice>
               </TicketBox>
@@ -41,7 +49,9 @@ export default function ChooseTicketPage() {
           )}
           
         </Container>
+        
       )}
+      {selectedTicketType === 'online' ? <OnlineType ticket={selectedTicket}/> : selectedTicketType === 'pressencial' ? <PresentialType /> : ''}
     </>
   );
 }
