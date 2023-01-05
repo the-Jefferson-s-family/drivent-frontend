@@ -35,13 +35,13 @@ export default function ChooseTicketPage() {
 
               <TicketBox isSelected={selectedTicketType === 'online' ? true : false}  onClick={e => toggleTicket('online', type)} key={index}>
                 <BoxSelectionTitle>{type.name}</BoxSelectionTitle>
-                <BoxSelectionPrice>{type.price}</BoxSelectionPrice>
+                <BoxSelectionPrice>R$ {type.price}</BoxSelectionPrice>
               </TicketBox>
 
             ) : !type.isRemote && type.includesHotel  ? (
               <TicketBox isSelected={selectedTicketType === 'pressencial' ? true : false} onClick={e => toggleTicket('pressencial', type)} >
                 <BoxSelectionTitle>{type.name}</BoxSelectionTitle>
-                <BoxSelectionPrice>{type.price}</BoxSelectionPrice>
+                <BoxSelectionPrice>R$ {type.price}</BoxSelectionPrice>
               </TicketBox>
             ) : (
               <></>
@@ -51,7 +51,7 @@ export default function ChooseTicketPage() {
         </Container>
         
       )}
-      {selectedTicketType === 'online' ? <OnlineType ticket={selectedTicket}/> : selectedTicketType === 'pressencial' ? <PresentialType /> : ''}
+      {selectedTicketType === 'online' ? <OnlineType ticket={selectedTicket}/> : selectedTicketType === 'pressencial' ? <PresentialType ticket={selectedTicket}/> : ''}
     </>
   );
 }

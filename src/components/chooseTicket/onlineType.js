@@ -1,6 +1,4 @@
-import { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import Typography from '@material-ui/core/Typography';
 import { toast } from 'react-toastify';
 import useToken from '../../hooks/useToken';
 import { reserveTicket } from '../../services/ticketApi';
