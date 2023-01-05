@@ -1,23 +1,47 @@
 import styled from 'styled-components';
 import Typography from '@material-ui/core/Typography';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import useGetTicketTypes from '../../hooks/api/useTicketTypes';
 
 export default function ChooseTicketPage() {
+  const { ticketTypes } = useGetTicketTypes();
   const [selectedTicket, setSelectedTicket] = useState('');
+  const [ticketTypesData, setTicketTypesData] = useState();
+
+  useEffect(() => {
+    if(ticketTypes) {
+      setTicketTypesData(ticketTypes);
+    }
+  }, [ticketTypes]);
+
   return (
     <>
       <StyledTypography variant="h4">Ingresso e pagamento</StyledTypography>
       <StyledSubTitle>Primeiro, escolha sua modalidade de ingresso:</StyledSubTitle>
-      <Container>
-        <TicketBox isSelected={selectedTicket === 'pressencial' ? true : false} onClick={e => setSelectedTicket('pressencial')} >
-          <BoxSelectionTitle>Presencial</BoxSelectionTitle>
-          <BoxSelectionPrice>R$ 13.5</BoxSelectionPrice>
-        </TicketBox>
-        <TicketBox isSelected={selectedTicket === 'online' ? true : false}  onClick={e => setSelectedTicket('online')} >
-          <BoxSelectionTitle>Online</BoxSelectionTitle>
-          <BoxSelectionPrice>R$ 13.5</BoxSelectionPrice>
-        </TicketBox>
-      </Container>
+
+      {ticketTypesData === undefined ? (<StyledTypography variant="h2">Carregando...</StyledTypography>) : (
+        <Container>
+
+          {ticketTypesData.map((type, index) =>
+            type.isRemote ? (
+
+              <TicketBox isSelected={selectedTicket === 'online' ? true : false}  onClick={e => setSelectedTicket('online')} key={index}>
+                <BoxSelectionTitle>{type.name}</BoxSelectionTitle>
+                <BoxSelectionPrice>{type.price}</BoxSelectionPrice>
+              </TicketBox>
+
+            ) : !type.isRemote && type.includesHotel  ? (
+              <TicketBox isSelected={selectedTicket === 'pressencial' ? true : false} onClick={e => setSelectedTicket('pressencial')} >
+                <BoxSelectionTitle>{type.name}</BoxSelectionTitle>
+                <BoxSelectionPrice>{type.price}</BoxSelectionPrice>
+              </TicketBox>
+            ) : (
+              <></>
+            )
+          )}
+          
+        </Container>
+      )}
     </>
   );
 }
