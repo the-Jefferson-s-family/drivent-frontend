@@ -4,6 +4,7 @@ import useGetTicket from '../../../hooks/api/useTicket';
 import PaymentCompletePage from '../../../components/paymentComplete';
 import ErrorPage from '../../../components/CannotChooseTicket';
 import CreditCardPage from '../../../components/ticketReserved';
+import ChooseTicketPage from '../../../components/chooseTicket';
 import { useState } from 'react';
 
 export default function Payment() {
@@ -40,7 +41,9 @@ export default function Payment() {
   }
   if(buyTicketBoolean === true) {
     //Page to Buy Ticket here
-    return 'Comprar Ticket: Em breve!';
+    return (
+      <ChooseTicketPage />
+    );
   }
   return (
     <ErrorPage message1={'Você precisa completar sua inscrição'} message2={'antes de prosseguir pra escolha de ingresso'}/>
