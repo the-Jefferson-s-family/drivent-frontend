@@ -1,7 +1,16 @@
 import api from './api';
 
-async function getHotel(token) {
+async function getHotels(token) {
   const response = await api.get('/hotels', {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+}
+
+export async function getRoomsByHotelId(token, hotelId) {
+  const response = await api.get(`/hotels/${hotelId}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -18,6 +27,14 @@ async function getBookings(token, hotelId) {
   return response.data;
 }
 
+export async function getBookinsByRoomId(token, roomId) {
+  const response = await api.get(`/booking/${roomId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+}
 async function postBooking(token, roomId) {
   const response = await api.post('/booking', {
     roomId
@@ -26,10 +43,13 @@ async function postBooking(token, roomId) {
       Authorization: `Bearer ${token}`,
     },
   });
+  return response.data;
 }
 
 const hotelApi={
-  getHotel,
+  getHotels,
+  getRoomsByHotelId,
+  getBookinsByRoomId,
   getBookings,
   postBooking,
 };

@@ -36,6 +36,7 @@ export const H1Grey = styled.h1`
 export const H1Black = styled.h1`
     font-size:20px;
     color: black;
+    margin-bottom: 10px;
 `;
 export const HotelBodyInner =  styled.div`
     width:100%;
@@ -102,3 +103,33 @@ export const iconPersonPink = <ion-icon name='person' style = {{ color: '#E75E90
 export const iconPersonGray = <ion-icon name='person' style = {{ color: 'gray', fontSize: '20px', marginLeft: '4px' }} ></ion-icon>;
 
 export const iconPersonBlack = <ion-icon name='person' style = {{ color: 'black', fontSize: '20px', marginLeft: '4px' }}></ion-icon>;
+
+export const HotelRoomInfo = styled.div`
+    h4{
+        font-family: 'Roboto';
+        font-style: normal;
+        font-weight: 700;
+        font-size: 12px;
+        line-height: 14px;
+        color: #3C3C3C;
+    }
+    h5 {
+        font-family: 'Roboto';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 14px;
+        color: #3C3C3C;
+    }
+`;
+export const TypesRoom = styled.div`
+    h5 {
+        margin-top: 2px;
+        margin-bottom: 14px;
+    }
+`;
+export const AvailableRoom =  styled.div`
+    h5{ 
+        margin-top: 2px
+    }
+`;
