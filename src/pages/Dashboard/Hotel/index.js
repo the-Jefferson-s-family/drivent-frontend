@@ -3,29 +3,27 @@ import hotelApi from '../../../services/hotelsApi';
 
 import UntouriedPayment from './UntourizedPayment';
 import UntouriedTicket from './UntourizedTicket';
-import ChooseHotel from './ chooseHotel';
+import ChooseHotel from './ chooseHotel'; //passar hotel={hotel}
+import RoomsHotel from './RoomsHotel'; //passar id={id}
 import { useEffect, useState } from 'react';
+import useToken from '../../../hooks/useToken';
 
 export default function Hotel() {
+  const token = useToken();
   const [hotel, setHotel] = useState ([]);
-  //resolver o loop
-  // useEffect(() => {
-  //   console.log('passando');
-  //   hotelApi.getHotel().then((e) => {
-  //     console.log('deu bom', e);
-  //   }).catch((e) => {
-  //     console.log('deu ruim', e);
-  //   });
-  // }, []);
 
-  hotelApi.getHotel().then((e) => {
-    setHotel(e);
-  }).catch((e) => {
-    console.log('catcchhhhhh');//tratar o erro
-  });
+  const id=1;
+
+  useEffect(() => {
+    hotelApi.getHotel(token).then((e) => {
+      setHotel(e);
+    }).catch((e) => {
+      console.log('catcchhhhhh');//tratar o erro
+    });
+  }, []);
 
   return (<>
     <StyledTypography variant="h4">Escolha de hotel e quarto</StyledTypography>
-    <ChooseHotel hotel={hotel}/>
+    <RoomsHotel id={ id } />
   </>);
 }

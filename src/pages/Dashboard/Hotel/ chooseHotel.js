@@ -10,7 +10,6 @@ function BoxHotel( { name, image } ) {
 }
 
 export default function ChooseHotel( { hotel } ) {
-  // console.log(hotel);
   return (<>
     <HotelBody>
       <H1Grey>Primeiro, escolha seu hotel</H1Grey>

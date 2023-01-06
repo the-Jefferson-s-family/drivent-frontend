@@ -44,3 +44,61 @@ export const HotelBodyInner =  styled.div`
     flex-wrap: wrap;
     overflow-y:scroll;
 `;
+export const DivRooms = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+`;
+const BoxRoomsStyle =`
+    width: 165px;
+    height: 40px;
+    border-radius: 8px;
+    border:1px solid #dddddd;
+    display: flex;
+    justify-content: space-between;
+    align-items:center;
+    padding: 0 10px;
+    font-size: 17px;
+    margin: 5px 10px;
+    cursor: pointer;
+`;
+//ajeitar a font depois
+
+export const BoxRooms = styled.div`
+    ${BoxRoomsStyle}
+    color: #595757;
+    &: hover{
+        background: #FDEED2;
+    }
+`;
+export const BoxRoomsFull = styled.div`
+    ${BoxRoomsStyle}
+    background: #F1F1F1;
+    color: gray;
+`;
+export const BoxRoomsSelected = styled.div`
+    ${BoxRoomsStyle}
+    background: #FDEED2;
+    color: #595757;
+`;
+export const ButtonReserve = styled.div`
+    width: 165px;
+    height: 40px;
+    background: #e0e0e0;
+    border-radius: 5px;
+    border:1px solid transparent;
+    box-shadow: 0 0 10px -4px gray;
+    margin:40px 0 0 10px;
+    cursor: pointer;
+    &: hover{
+        background: #d1cdca;
+        box-shadow: 0 0 10px -4px #595959;
+    }
+`;
+
+export const iconPerson = <ion-icon name='person-outline' style = {{ fontSize: '20px', marginLeft: '4px' }}></ion-icon>;
+
+export const iconPersonPink = <ion-icon name='person' style = {{ color: '#E75E90', fontSize: '20px', marginLeft: '4px' }}></ion-icon>;
+
+export const iconPersonGray = <ion-icon name='person' style = {{ color: 'gray', fontSize: '20px', marginLeft: '4px' }} ></ion-icon>;
+
+export const iconPersonBlack = <ion-icon name='person' style = {{ color: 'black', fontSize: '20px', marginLeft: '4px' }}></ion-icon>;
