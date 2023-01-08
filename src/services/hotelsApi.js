@@ -1,6 +1,6 @@
 import api from './api';
 
-export async function getHotels(token) {
+async function getHotels(token) {
   const response = await api.get('/hotels', {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -18,8 +18,46 @@ export async function getRoomsByHotelId(token, hotelId) {
   return response.data;
 }
 
+async function getBookings(token, hotelId) {
+  const response = await api.get(`/booking/all/${hotelId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+}
+
 export async function getBookinsByRoomId(token, roomId) {
   const response = await api.get(`/booking/${roomId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+}
+
+async function postBooking(token, roomId) {
+  const response = await api.post('/booking', {
+    roomId
+  }, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+}
+
+async function getBookingUser(token) {
+  const response = await api.get('/booking/user', {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+}
+
+async function getBooking(token, roomId) {
+  const response = await api.get('/booking', {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -30,7 +68,11 @@ export async function getBookinsByRoomId(token, roomId) {
 const hotelApi={
   getHotels,
   getRoomsByHotelId,
-  getBookinsByRoomId
+  getBookinsByRoomId,
+  getBookings,
+  postBooking,
+  getBookingUser,
+  getBooking
 };
 
 export default hotelApi;
