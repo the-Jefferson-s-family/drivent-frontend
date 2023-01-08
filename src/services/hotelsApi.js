@@ -35,10 +35,29 @@ export async function getBookinsByRoomId(token, roomId) {
   });
   return response.data;
 }
+
 async function postBooking(token, roomId) {
   const response = await api.post('/booking', {
     roomId
   }, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+}
+
+async function getBookingUser(token) {
+  const response = await api.get('/booking/user', {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+}
+
+async function getBooking(token, roomId) {
+  const response = await api.get('/booking', {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -52,6 +71,8 @@ const hotelApi={
   getBookinsByRoomId,
   getBookings,
   postBooking,
+  getBookingUser,
+  getBooking
 };
 
 export default hotelApi;

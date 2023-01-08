@@ -1,4 +1,4 @@
-import { HotelBody, DivRooms, BoxRooms, iconPerson, iconPersonBlack, iconPersonPink, iconPersonGray, BoxRoomsFull, BoxRoomsSelected, ButtonReserve } from './styled';
+import { HotelBody, DivRooms, BoxRooms, iconPerson, iconPersonBlack, iconPersonPink, iconPersonGray, BoxRoomsFull, BoxRoomsSelected, ButtonReserve, H1Grey } from './styled';
 import { BsPerson } from 'react-icons/bs';
 import hotelApi from '../../../services/hotelsApi';
 import { useEffect } from 'react';
@@ -10,8 +10,7 @@ export default function RoomsHotel( { id } ) {
   const token = useToken();
   const [bookings, setBookings] = useState ([]);
   const [roomId, setRoomId] = useState('');
-  // const [button, setButton] = useState(false); style={ (button)?  { display: '' } : { display: 'none' } } 
-  
+
   useEffect ( async() => {
     await hotelApi.getBookings(token, id).then((e) => {
       setBookings(e);
@@ -73,6 +72,7 @@ export default function RoomsHotel( { id } ) {
  
   return (<>
     <HotelBody>
+      <H1Grey style={ { margin: '20px 10px' } }>Ótima pedida! agora escolha seu quarto:</H1Grey>
       <DivRooms>
         {render}
       </DivRooms>

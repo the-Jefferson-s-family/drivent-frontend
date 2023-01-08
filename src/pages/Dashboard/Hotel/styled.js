@@ -14,13 +14,25 @@ export const HotelBodyCenter = styled.div`
 export const HotelBody = styled.div`
     height: 80%;
 `;
-export const BoxInfo = styled.div`
+const baseBox = `
     width: 200px;
-    height: 250px;
+    height: 260px;
     border-radius:10px;
-    background: #ebebeb;
     padding: 15px;
     margin: 0 16px 15px 0;
+    cursor: pointer;
+    &: hover{
+        background: #FDEED2;
+    }
+`;
+export const BoxInfo = styled.div`
+    ${baseBox}
+    background: #ebebeb;
+`;
+export const BoxInfo2 = styled.div`
+    ${baseBox}
+    background: #FDEED2;
+    
 `;
 export const Image = styled.img`
     width: 170px;
@@ -34,7 +46,7 @@ export const H1Grey = styled.h1`
     margin-bottom:20px;
 `;
 export const H1Black = styled.h1`
-    font-size:20px;
+    font-size:18px;
     color: black;
     margin-bottom: 10px;
 `;
@@ -42,8 +54,12 @@ export const HotelBodyInner =  styled.div`
     width:100%;
     height:100%;
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     overflow-y:scroll;
+    div {
+        display:flex;
+        flex-wrap: wrap;
+    }
 `;
 export const DivRooms = styled.div`
     display: flex;
@@ -62,7 +78,6 @@ const BoxRoomsStyle =`
     margin: 5px 10px;
     cursor: pointer;
 `;
-//ajeitar a font depois
 
 export const BoxRooms = styled.div`
     ${BoxRoomsStyle}
@@ -90,6 +105,9 @@ export const ButtonReserve = styled.div`
     box-shadow: 0 0 10px -4px gray;
     margin:40px 0 0 10px;
     cursor: pointer;
+    display:flex;
+    justify-content: center;
+    align-items: center;
     &: hover{
         background: #d1cdca;
         box-shadow: 0 0 10px -4px #595959;
@@ -123,12 +141,16 @@ export const HotelRoomInfo = styled.div`
     }
 `;
 export const TypesRoom = styled.div`
+    display: flex;
+    flex-direction: column;
     h5 {
         margin-top: 2px;
         margin-bottom: 14px;
     }
 `;
 export const AvailableRoom =  styled.div`
+    display: flex;
+    flex-direction: column;
     h5{ 
         margin-top: 2px
     }

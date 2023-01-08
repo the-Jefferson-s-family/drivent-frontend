@@ -2,15 +2,19 @@ import { roundToNearestMinutes } from 'date-fns';
 import { useEffect, useState } from 'react';
 import useToken from '../../../hooks/useToken';
 import hotelApi from '../../../services/hotelsApi';
+import RoomsHotel from './RoomsHotel';
 import { BoxInfo, H1Black, H1Grey, HotelBody, Image, HotelBodyInner, HotelRoomInfo, TypesRoom, AvailableRoom } from './styled';
 
-function BoxHotel( { hotel } ) {
+function BoxHotel( { hotel, setId  } ) {
   const roomNameString = filterRoomNames(hotel.Rooms);
-  const token = useToken();
   const numeroVagas = useCountAvailableRooms(hotel.Rooms);
   
+  function selectedHotel(id) {
+    setId(id);
+  }
+
   return(
-    <BoxInfo>
+    <BoxInfo onClick={() => {selectedHotel(hotel.id);}}>
       <Image src={hotel.image} />
       <H1Black>{hotel.name}</H1Black>
       <HotelRoomInfo>
@@ -22,7 +26,6 @@ function BoxHotel( { hotel } ) {
           <h4>Tipos de acomodação</h4>
           <h5>{numeroVagas}</h5>
         </AvailableRoom>
-
       </HotelRoomInfo>
     </BoxInfo>
   );
@@ -69,11 +72,15 @@ function useCountAvailableRooms(rooms) {
 }
 
 export default function ChooseHotel( { hotels } ) {
+  const [id, setId] = useState(0);
   return (<>
     <HotelBody>
       <H1Grey>Primeiro, escolha seu hotel</H1Grey>
       <HotelBodyInner>
-        {hotels.map((e, i) => (<BoxHotel key={i} hotel={e}/>))}
+        <div>
+          {hotels.map((e, i) => (<BoxHotel key={i} hotel={e}  setId={setId} />))}
+        </div>
+        {(id != 0 )? <RoomsHotel id = {id} /> : <div></div>}
       </HotelBodyInner>
     </HotelBody>
   </>);
