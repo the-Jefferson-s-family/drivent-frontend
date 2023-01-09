@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import AuthLayout from '../../layouts/Auth';
 import GitHubAuth from '../../components/GitHubAuth';
-import styled from 'styled-components';
+import queryString from 'query-string';
 
 import Input from '../../components/Form/Input';
 import Button from '../../components/Form/Button';
@@ -40,16 +40,6 @@ export default function SignIn() {
     }
   } 
 
-  function redirectToGitHub() {
-    const GITHUB_URL = 'https://github.com/login/oauth/authorize';
-    const params = {
-      response_type: 'code',
-      scope: 'string',
-      client_id: process.env.CLIENT_ID,
-      redirect_uri: process.env.process.env.REDIRECT_URI
-    };
-  }
-
   return (
     <AuthLayout background={eventInfo.backgroundImageUrl}>
       <Row>
@@ -57,7 +47,7 @@ export default function SignIn() {
         <Title>{eventInfo.title}</Title>
       </Row>
 
-      <GitHubAuth onCLick={redirectToGitHub}/>
+      <GitHubAuth />
       
       <Row>
         <Label>Entrar</Label>
