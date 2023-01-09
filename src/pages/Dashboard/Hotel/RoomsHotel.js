@@ -1,15 +1,19 @@
 import { HotelBody, DivRooms, BoxRooms, iconPerson, iconPersonBlack, iconPersonPink, iconPersonGray, BoxRoomsFull, BoxRoomsSelected, ButtonReserve, H1Grey } from './styled';
-import { BsPerson } from 'react-icons/bs';
 import hotelApi from '../../../services/hotelsApi';
 import { useEffect } from 'react';
 import useToken from '../../../hooks/useToken';
 import { useState } from 'react';
 import { StyledTypography } from '../../../components/PersonalInformationForm';
 
-export default function RoomsHotel( { id } ) {
+export default function RoomsHotel( { id, transationType, bookingId } ) {
   const token = useToken();
   const [bookings, setBookings] = useState ([]);
   const [roomId, setRoomId] = useState('');
+
+  let buttonRoom= 'RESERVAR QUARTO';
+  if(transationType) {
+    buttonRoom = 'CONFIRMAR TROCA';
+  }
 
   useEffect ( async() => {
     await hotelApi.getBookings(token, id).then((e) => {
@@ -18,6 +22,21 @@ export default function RoomsHotel( { id } ) {
       console.log('catcchhhhhh');//tratar o erro
     });
   }, []);
+
+  async function reserve() {
+    await hotelApi.postBooking(token, roomId).then((e) => {
+      window.location.reload();
+    }).catch((e) => {
+      console.log('deu ruim', e);
+    });
+  }
+  async function chooseRoom() {
+    await hotelApi.putRoom(token, bookingId, roomId).then((e) => {
+      window.location.reload();
+    }).catch((e) => {
+      console.log('deu ruim', e);
+    });
+  }
 
   const render = bookings.map((room, i) => {
     let icons = [];
@@ -62,13 +81,6 @@ export default function RoomsHotel( { id } ) {
       }
     }
   });
-  async function reserve() {
-    await hotelApi.postBooking(token, roomId).then((e) => {
-      window.location.reload();
-    }).catch((e) => {
-      console.log('deu ruim', e);
-    });
-  }
  
   return (<>
     <HotelBody>
@@ -76,8 +88,8 @@ export default function RoomsHotel( { id } ) {
       <DivRooms>
         {render}
       </DivRooms>
-      <ButtonReserve onClick={() => reserve()}> 
-        <StyledTypography variant="h4" style= { { fontSize: '12px', textAlign: 'center', marginTop: '12px' } }>RESERVAR QUARTO</StyledTypography>
+      <ButtonReserve onClick={() => {(transationType)? chooseRoom() : reserve();}}> 
+        <StyledTypography variant="h4" style= { { fontSize: '12px', textAlign: 'center', marginTop: '12px' } }>{buttonRoom}</StyledTypography>
       </ButtonReserve>
     </HotelBody>
   </>);

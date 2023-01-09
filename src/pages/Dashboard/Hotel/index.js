@@ -13,6 +13,7 @@ export default function Hotel() {
   const [hotels, setHotels] = useState ([]);
   const [hotelsWithRooms, setHotelsWithRooms] = useState([]);
   const [haveBooking, setHaveBooking] = useState(false);
+  const [transationType, setTransationType] = useState(false);
   let token = useToken();
   const id= 1;
 
@@ -40,7 +41,10 @@ export default function Hotel() {
   return (
     <>
       <StyledTypography variant="h4">Escolha de hotel e quarto</StyledTypography>
-      {(haveBooking)? <BookingHotel/>: <ChooseHotel hotels = {hotelsWithRooms} />}
+      {(haveBooking)? 
+        <BookingHotel setTransationType = {setTransationType} transationType ={transationType}/>
+        : 
+        <ChooseHotel hotels = {hotelsWithRooms} setTransationType = {setTransationType} transationType = {transationType}/>}
     </>
   );
 }

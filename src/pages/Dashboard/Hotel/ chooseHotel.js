@@ -71,8 +71,9 @@ function useCountAvailableRooms(rooms) {
   return numeroVagas;
 }
 
-export default function ChooseHotel( { hotels } ) {
+export default function ChooseHotel( { hotels, setTransationType, transationType } ) {
   const [id, setId] = useState(0);
+  setTransationType(false);
   return (<>
     <HotelBody>
       <H1Grey>Primeiro, escolha seu hotel</H1Grey>
@@ -80,7 +81,7 @@ export default function ChooseHotel( { hotels } ) {
         <div>
           {hotels.map((e, i) => (<BoxHotel key={i} hotel={e}  setId={setId} />))}
         </div>
-        {(id != 0 )? <RoomsHotel id = {id} /> : <div></div>}
+        {(id != 0 )? <RoomsHotel id = {id} transationType = {transationType} /> : <div></div>}
       </HotelBodyInner>
     </HotelBody>
   </>);

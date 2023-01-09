@@ -2,11 +2,16 @@ import { useEffect, useState } from 'react';
 import { StyledTypography } from '../../../components/PersonalInformationForm';
 import useToken from '../../../hooks/useToken';
 import hotelApi from '../../../services/hotelsApi';
-import { AvailableRoom, BoxInfo2, H1Black, H1Grey, HotelBody, HotelBodyInner, HotelRoomInfo, TypesRoom, Image, ButtonReserve   } from './styled';
+import RoomsHotel from './RoomsHotel';
+import { AvailableRoom, BoxInfo2, H1Black, H1Grey, HotelBody, HotelBodyInner, HotelRoomInfo, TypesRoom, Image, ButtonReserve } from './styled';
 
-function BoxHotelRender( { booking } ) {
+function BoxHotelRender( { booking, setRoomId, setId, setBookingId } ) {
   console.log(booking);
+  setBookingId(booking.bookingId);
+  setId(booking.hotelId);
+  setRoomId(booking.roomId);
   let quantity = '';
+  
   if(Number(booking.roomBooking != 1)) {
     let number = booking.roomBooking - 1;
     quantity = 'e mais ' + number;
@@ -29,9 +34,14 @@ function BoxHotelRender( { booking } ) {
   );
 }
 
-export default function BookingHotel() {
+export default function BookingHotel( { setTransationType, transationType } ) {
   const token = useToken();
   const [bookingHotel, setBookingHotel] = useState([]);
+  const [roomId, setRoomId] = useState(0);
+  const [id, setId] = useState(0);
+  const [chooseRoom, setChooseRoom] = useState(false);
+  const [bookingId, setBookingId] = useState(0);
+  setTransationType(true);
 
   useEffect(() => {
     hotelApi.getBookingUser(token).then((e) => {
@@ -40,20 +50,32 @@ export default function BookingHotel() {
       console.log('deu ruim', e);
     });
   }, []);
-
+  
   return (
     <HotelBody>
       <H1Grey>Você já escolheu seu quarto:</H1Grey>
+      
       <HotelBodyInner>
         <div>
-          {bookingHotel.map((booking) => {
-            return <BoxHotelRender booking = {booking} />;
+          {bookingHotel.map((booking, i) => {
+            return <BoxHotelRender 
+              key={i} 
+              booking = {booking} 
+              setRoomId = { setRoomId } 
+              setId = {setId} 
+              setBookingId = {setBookingId} />;
           })}
         </div>
-        <ButtonReserve onClick={() => {alert('olaa');}}> 
+
+        <ButtonReserve onClick={() => {setChooseRoom(true); }}> 
           <StyledTypography variant="h4" style= { { fontSize: '12px', textAlign: 'center', marginTop: '12px' } }>TROCAR DE QUARTO</StyledTypography>
         </ButtonReserve>
+        {(id != 0 && chooseRoom)? 
+          <RoomsHotel id={id} transationType = {transationType} bookingId ={bookingId}/> 
+          : 
+          <div></div>}
       </HotelBodyInner>
+
     </HotelBody>
   );
 }
