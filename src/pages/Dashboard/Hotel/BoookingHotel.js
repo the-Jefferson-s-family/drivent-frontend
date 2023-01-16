@@ -6,7 +6,6 @@ import RoomsHotel from './RoomsHotel';
 import { AvailableRoom, BoxInfo2, H1Black, H1Grey, HotelBody, HotelBodyInner, HotelRoomInfo, TypesRoom, Image, ButtonReserve } from './styled';
 
 function BoxHotelRender( { booking, setRoomId, setId, setBookingId } ) {
-  console.log(booking);
   setBookingId(booking.bookingId);
   setId(booking.hotelId);
   setRoomId(booking.roomId);
@@ -73,7 +72,7 @@ export default function BookingHotel( { setTransationType, transationType } ) {
         {(id != 0 && chooseRoom)? 
           <RoomsHotel id={id} transationType = {transationType} bookingId ={bookingId}/> 
           : 
-          <div></div>}
+          <div> </div>}
       </HotelBodyInner>
 
     </HotelBody>

@@ -14,6 +14,8 @@ export default function Hotel() {
   const [hotelsWithRooms, setHotelsWithRooms] = useState([]);
   const [haveBooking, setHaveBooking] = useState(false);
   const [transationType, setTransationType] = useState(false);
+  const [payment, setPayment] = useState(false);
+  const [ticket, setTicket] = useState(false);
   let token = useToken();
   const id= 1;
 
@@ -26,9 +28,15 @@ export default function Hotel() {
         setHaveBooking(true);
       });
     } catch (e) {
+      if(e.response.status === 402 && !e.response.data.message) {
+        setPayment(true);
+      }
+      if (e.response.data.message) {
+        setTicket(true);
+      };
     };
   }, []);
-
+  
   async function organizeHotelsWithRooms(token, hotelList) {
     let list = [];
     for (let i = 0; i < hotelList.length; i++) {
@@ -41,10 +49,14 @@ export default function Hotel() {
   return (
     <>
       <StyledTypography variant="h4">Escolha de hotel e quarto</StyledTypography>
-      {(haveBooking)? 
-        <BookingHotel setTransationType = {setTransationType} transationType ={transationType}/>
-        : 
-        <ChooseHotel hotels = {hotelsWithRooms} setTransationType = {setTransationType} transationType = {transationType}/>}
+      {(payment)? <UntouriedPayment></UntouriedPayment> 
+        :
+        (ticket)? <UntouriedTicket></UntouriedTicket>
+          :
+          (haveBooking)? 
+            <BookingHotel setTransationType = {setTransationType} transationType ={transationType}/>
+            : 
+            <ChooseHotel hotels = {hotelsWithRooms} setTransationType = {setTransationType} transationType = {transationType}/>}
     </>
   );
 }
