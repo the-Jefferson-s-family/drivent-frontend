@@ -10,13 +10,16 @@ export default function RoomsHotel( { id } ) {
   const token = useToken();
   const [bookings, setBookings] = useState ([]);
   const [roomId, setRoomId] = useState('');
+  console.log('ESTOU SENDO CHAMADO ROOMS HOTEL');
 
   useEffect ( async() => {
-    await hotelApi.getBookings(token, id).then((e) => {
-      setBookings(e);
-    }).catch((e) => {
-      console.log('catcchhhhhh');//tratar o erro
-    });
+    await hotelApi.getBookings(token, id)
+      .then((e) => {
+        console.log('oque siginifca e ? ', e );
+        setBookings(e);
+      }).catch((err) => {
+        console.log('catch component RoomsHotel :', err);//tratar o erro
+      });
   }, []);
 
   const render = bookings.map((room, i) => {

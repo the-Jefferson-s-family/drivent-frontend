@@ -18,13 +18,17 @@ export default function Hotel() {
 
   useEffect(async() => {
     try {
-      const hotelsList = await hotelApi.getHotels(token);
-      setHotels(hotelsList);
-      await organizeHotelsWithRooms(token, hotelsList);
-      await hotelApi.getBooking(token).then((e) => {
-        setHaveBooking(true);
+      await hotelApi.getBookingOfUser(token).then((bookingOfUser) => {
+        if(bookingOfUser) { setHaveBooking(true);  }
       });
-    } catch (e) {
+
+      if(!haveBooking) {
+        const hotelsList = await hotelApi.getHotels(token);
+        setHotels(hotelsList);
+        await organizeHotelsWithRooms(token, hotelsList);
+      }
+    } catch (err) { 
+      console.log('ERROR CATCH useEffect hotels page index :', err);
     };
   }, []);
 
@@ -40,7 +44,7 @@ export default function Hotel() {
   return (
     <>
       <StyledTypography variant="h4">Escolha de hotel e quarto</StyledTypography>
-      {(haveBooking)? <BookingHotel/>: <ChooseHotel hotels = {hotelsWithRooms} />}
+      { (haveBooking) ? <BookingHotel/> : <ChooseHotel hotels = {hotelsWithRooms} />}
     </>
   );
 }

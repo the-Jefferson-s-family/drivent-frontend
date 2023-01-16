@@ -15,7 +15,7 @@ export default class PaymentForm extends React.Component {
 
   handleInputFocus = (e) => {
     this.setState({ focus: e.target.name });
-  }
+  };
 
   handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -32,7 +32,7 @@ export default class PaymentForm extends React.Component {
     this.props.setForm({ ...this.props.form, [name]: value });
     this.props.setIssuer(GetCardType(this.state.number));
     this.setState({ [name]: value });
-  }
+  };
 
   render() {
     return (

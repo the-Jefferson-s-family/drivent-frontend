@@ -56,8 +56,8 @@ async function getBookingUser(token) {
   return response.data;
 }
 
-async function getBooking(token, roomId) {
-  const response = await api.get('/booking', {
+async function getBookingOfUser(token, roomId) {
+  const response = await api.get('/booking/', {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -65,14 +65,14 @@ async function getBooking(token, roomId) {
   return response.data;
 }
 
-const hotelApi={
+const hotelApi = {
   getHotels,
   getRoomsByHotelId,
   getBookinsByRoomId,
   getBookings,
   postBooking,
   getBookingUser,
-  getBooking
+  getBookingOfUser
 };
 
 export default hotelApi;

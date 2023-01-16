@@ -8,13 +8,10 @@ import { BoxInfo, H1Black, H1Grey, HotelBody, Image, HotelBodyInner, HotelRoomIn
 function BoxHotel( { hotel, setId  } ) {
   const roomNameString = filterRoomNames(hotel.Rooms);
   const numeroVagas = useCountAvailableRooms(hotel.Rooms);
-  
-  function selectedHotel(id) {
-    setId(id);
-  }
+  console.log('HOTEL ID :', hotel.id);
 
   return(
-    <BoxInfo onClick={() => {selectedHotel(hotel.id);}}>
+    <BoxInfo onClick={() => setId(hotel.id)}>
       <Image src={hotel.image} />
       <H1Black>{hotel.name}</H1Black>
       <HotelRoomInfo>
@@ -73,14 +70,15 @@ function useCountAvailableRooms(rooms) {
 
 export default function ChooseHotel( { hotels } ) {
   const [id, setId] = useState(0);
+  console.log('id do hotel : ', id);
   return (<>
     <HotelBody>
       <H1Grey>Primeiro, escolha seu hotel</H1Grey>
       <HotelBodyInner>
         <div>
-          {hotels.map((e, i) => (<BoxHotel key={i} hotel={e}  setId={setId} />))}
+          {hotels.map((hotel, i) => (<BoxHotel key={i} hotel={hotel}  setId={setId} />))}
         </div>
-        {(id != 0 )? <RoomsHotel id = {id} /> : <div></div>}
+        { (!id) ? <RoomsHotel id = {id} /> : <div></div>}
       </HotelBodyInner>
     </HotelBody>
   </>);
