@@ -23,7 +23,7 @@ function BoxHotel( { hotel, setId  } ) {
           <h5> {roomNameString} </h5>
         </TypesRoom>
         <AvailableRoom>
-          <h4>Tipos de acomodação</h4>
+          <h4>Vagas disponíveis</h4>
           <h5>{numeroVagas}</h5>
         </AvailableRoom>
       </HotelRoomInfo>
