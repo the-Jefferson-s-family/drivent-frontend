@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import PaymentForm from './PaymentForm';
+// import PaymentForm from './PaymentForm';
 import Typography from '@material-ui/core/Typography';
 import usePayment from '../../hooks/api/usePayment';
 import { StyledSubTitle } from '../paymentComplete/subTitle';
@@ -43,7 +43,7 @@ export default function CreditCardPage({ ticketName, ticketPrice, ticketId, setP
         <p>R$ {ticketPrice/100}</p>
       </StyledTicket>
       <StyledSubTitle>Pagamento</StyledSubTitle>
-      <PaymentForm form={form} setForm={setForm} setIssuer={setIssuer} handleForm={handleForm}/>
+      {/* <PaymentForm form={form} setForm={setForm} setIssuer={setIssuer} handleForm={handleForm}/> */}
     </>
   );
 }

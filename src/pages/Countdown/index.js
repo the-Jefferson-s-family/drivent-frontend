@@ -13,6 +13,8 @@ export default function Countdown() {
   const navigate = useNavigate();
   const countdownOver = useIsDateAfter(eventInfo?.startsAt);
 
+  console.log('CountDownOver : ', countdownOver);
+
   useEffect(() => {
     if (countdownOver) {
       navigate('/enroll');

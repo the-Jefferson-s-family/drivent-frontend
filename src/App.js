@@ -33,8 +33,7 @@ export default function App() {
               <Route path="/enroll" element={<Enroll />} />
               <Route path="/sign-in" element={<SignIn />} />
 
-              <Route
-                path="/dashboard"
+              <Route path="/dashboard"
                 element={
                   <ProtectedRouteGuard>
                     <Dashboard />

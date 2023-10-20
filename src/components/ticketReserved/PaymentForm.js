@@ -1,8 +1,8 @@
 import React from 'react';
-import Cards from 'react-credit-cards';
+// import Cards from 'react-credit-cards';
 import styled from 'styled-components';
 import GetCardType from './getCardIssuer';
-import 'react-credit-cards/es/styles-compiled.css';
+// import 'react-credit-cards/es/styles-compiled.css';
  
 export default class PaymentForm extends React.Component {
   state = {
@@ -15,7 +15,7 @@ export default class PaymentForm extends React.Component {
 
   handleInputFocus = (e) => {
     this.setState({ focus: e.target.name });
-  }
+  };
 
   handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -32,20 +32,20 @@ export default class PaymentForm extends React.Component {
     this.props.setForm({ ...this.props.form, [name]: value });
     this.props.setIssuer(GetCardType(this.state.number));
     this.setState({ [name]: value });
-  }
+  };
 
   render() {
     return (
       <>
         <StyledPage> 
           <StyledDiv id="PaymentForm">
-            <Cards
+            {/* <Cards
               cvc={this.state.cvc}
               expiry={this.state.expiry}
               focused={this.state.focus}
               name={this.state.name}
               number={this.state.number}
-            />
+            /> */}
           </StyledDiv>
           <StyledDiv>
             <form onSubmit={this.props.handleForm}>
