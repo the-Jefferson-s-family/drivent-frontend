@@ -7,10 +7,12 @@ import { StyledTicket } from '../paymentComplete/ticketContainer';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
-export default function CreditCardPage({ ticketName, ticketPrice, ticketId, setPaymentCompleteBoolean }) {
+export default function CreditCardPage({ ticketName, ticketPrice, includeHotel, ticketId, setPaymentCompleteBoolean }) {
   const [form, setForm] = useState({});
   const [issuer, setIssuer] = useState('Unknown');
   const { payRoute } = usePayment();
+  
+  const HOTEL_PRICE = 200;
 
   async function handleForm(event) {
     event.preventDefault();
@@ -39,8 +41,17 @@ export default function CreditCardPage({ ticketName, ticketPrice, ticketId, setP
       <StyledTypography variant="h4">Ingresso e pagamento</StyledTypography>
       <StyledSubTitle>Ingresso escolhido</StyledSubTitle>
       <StyledTicket>
-        <h6>{ticketName}</h6>
-        <p>R$ {ticketPrice/100}</p>
+        {includeHotel? (
+          <>
+            <h6>{ticketName} + Com Hotel</h6>
+            <p>R$ {ticketPrice + HOTEL_PRICE}</p> 
+          </>
+        ) : (
+          <>
+            <h6>{ticketName}</h6>
+            <p>R$ {ticketPrice}</p> 
+          </>
+        )}
       </StyledTicket>
       <StyledSubTitle>Pagamento</StyledSubTitle>
       {/* <PaymentForm form={form} setForm={setForm} setIssuer={setIssuer} handleForm={handleForm}/> */}

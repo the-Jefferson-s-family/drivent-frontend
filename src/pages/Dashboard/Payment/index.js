@@ -31,16 +31,22 @@ export default function Payment() {
   
   if(paymentCompleteBoolean === true) {
     return (
-      <PaymentCompletePage ticketName={ticketComplete.TicketType.name} ticketPrice={ticketComplete.TicketType.price}/>
+      <PaymentCompletePage 
+        ticketName={ticketComplete.TicketType.name}
+        ticketPrice={ticketComplete.TicketType.price}
+      />
     );
   }
   if(creditCardBoolean === true) {
     return (
-      <CreditCardPage ticketName={ticketComplete.TicketType.name} ticketPrice={ticketComplete.TicketType.price} ticketId={ticketComplete.id} setPaymentCompleteBoolean={setPaymentCompleteBoolean}/>
-    );
+      <CreditCardPage
+        ticketName={ticketComplete.TicketType.name} 
+        ticketPrice={ticketComplete.TicketType.price} 
+        ticketId={ticketComplete.id} 
+        setPaymentCompleteBoolean={setPaymentCompleteBoolean}
+      /> );
   }
   if(buyTicketBoolean === true) {
-    //Page to Buy Ticket here
     return (
       <ChooseTicketPage />
     );
