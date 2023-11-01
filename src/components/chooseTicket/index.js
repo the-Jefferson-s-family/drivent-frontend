@@ -15,6 +15,8 @@ export default function ChooseTicketPage() {
   const [selectedTicketType, setSelectedTicketType] = useState('');
   const [ticketTypesData, setTicketTypesData] = useState();
 
+  const [isHotelIncluded, setIsHotelIncluded] = useState(false);
+
   const [includeHotel, setIncludeHotel] = useState(false);
   const [total, setTotal] = useState(parseFloat(0));
 
@@ -29,11 +31,8 @@ export default function ChooseTicketPage() {
   }, [ticketTypes]);
 
   async function selectTicket(selectedTicketType) {
-    console.log('elected ticket type :', selectedTicketType);
     try {
-      console.log('Select Ticket PRE REQUEST :');
       const insertTicket = await reserveTicket( { ticketTypeId: selectedTicketType.id }, token );
-      console.log('Select Ticket pos REQUEST :', insertTicket);
       if (insertTicket) {
         toast('Ingresso reservado com sucesso!');
         setTimeout(() => {
@@ -48,10 +47,14 @@ export default function ChooseTicketPage() {
   function TicketTypeBox({ ticketType }) {
     return (
       <TicketBoxHTML
+        ticketType={ticketType}
+        selectedTicketType={selectedTicketType}
         onClick={() => {
           setSelectedTicketType(ticketType); 
-          setTotal(ticketType.price); 
-          setIncludeHotel(false);}} key={ticketType.index}
+          setTotal(ticketType.price);
+          setIsHotelIncluded('');
+        }} 
+        key={ticketType.index}
       >
         <BoxSelectionTitle>{ticketType.name}</BoxSelectionTitle>
         <BoxSelectionPrice>R$ {ticketType.price}</BoxSelectionPrice>
@@ -73,20 +76,35 @@ export default function ChooseTicketPage() {
             
             <Container>
               <TicketBox
-                onClick={(e) => {setTotal(selectedTicketType.price + PRICE_HOTEL); setIncludeHotel(true); } } 
+                style={{
+                  background: (isHotelIncluded === 'HOTEL_INCLUDED')? '#FFEED2' : '', 
+                  border: (isHotelIncluded === 'HOTEL_INCLUDED')? '1px solid #bcbcbc' : ''
+                }}
+                onClick={(e) => {
+                  setTotal(selectedTicketType.price + PRICE_HOTEL);
+                  setIsHotelIncluded('HOTEL_INCLUDED'); 
+                } } 
               >
                 <BoxSelectionTitle>Com Hotel</BoxSelectionTitle>
                 <BoxSelectionPrice>+ R$ ${PRICE_HOTEL} </BoxSelectionPrice>
               </TicketBox>
 
               <TicketBox
-                onClick={(e) => {setTotal(selectedTicketType.price);  setIncludeHotel(true);}}
+                style={{
+                  background: (isHotelIncluded === 'HOTEL_NOT_INCLUDED')? '#FFEED2' : '', 
+                  border: (isHotelIncluded === 'HOTEL_NOT_INCLUDED')? '1px solid #bcbcbc' : ''
+                }}
+                onClick={(e) => {
+                  setTotal(selectedTicketType.price);
+                  setIsHotelIncluded('HOTEL_NOT_INCLUDED');
+                  setIncludeHotel(true);
+                }}
               >
                 <BoxSelectionTitle>Sem Hotel</BoxSelectionTitle>
                 <BoxSelectionPrice>+ R$ 0</BoxSelectionPrice>
               </TicketBox>
             </Container>
-            { includeHotel? 
+            { (isHotelIncluded !== '')? 
               ( <>
                 <StyledSubTitle>Fechado! O total ficou em <strong>R$ {total}</strong>. Agora é só confirmar: </StyledSubTitle>
                 <Btn onClick={() => selectTicket(selectedTicketType)} >RESERVAR INGRESSO</Btn>
@@ -145,7 +163,10 @@ const TicketBoxHTML = styled.div`
     font-size: 16px;
     flex-direction: column;
     cursor: pointer;
-    ${({ isSelected }) => isSelected && 'background: #FFEED2; border: 1px solid #bcbcbc;'}
+    ${({ ticketType, selectedTicketType }) => {
+    if(ticketType === selectedTicketType) {
+      return 'background: #FFEED2; border: 1px solid #bcbcbc;';
+    }}}
     :hover{
         box-shadow: 2px 0 10px 0 rgb(0 0 0 / 20%);
     }
@@ -187,7 +208,6 @@ const TicketBox = styled.div`
     font-size: 16px;
     flex-direction: column;
     cursor: pointer;
-    ${({ isSelected }) => isSelected && 'background: #FFEED2; border: 1px solid #bcbcbc;'}
     :hover{
         box-shadow: 2px 0 10px 0 rgb(0 0 0 / 20%);
     }
