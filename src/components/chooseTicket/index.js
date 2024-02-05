@@ -11,17 +11,16 @@ import { reserveTicket } from '../../services/ticketApi';
 
 export default function ChooseTicketPage() {
   const { ticketTypes } = useGetTicketTypes();
-  const [selectedTicket, setSelectedTicket] = useState();
   const [selectedTicketType, setSelectedTicketType] = useState('');
   const [ticketTypesData, setTicketTypesData] = useState();
-
   const [isHotelIncluded, setIsHotelIncluded] = useState(false);
-
-  const [includeHotel, setIncludeHotel] = useState(false);
+  const [typeAccomodationSelected, setTypeAccomodationSelected] = useState(false);
   const [total, setTotal] = useState(parseFloat(0));
+  const [reserveAvalible, setReserveAvalible] = useState(false);
 
+  const WITH_HOTEL = 'WITH_HOTEL';
+  const WITHOUT_HOTEL = 'WITHOUT_HOTEL';
   const PRICE_HOTEL = 200;
-
   const token = useToken();
 
   useEffect(() => {
@@ -30,7 +29,7 @@ export default function ChooseTicketPage() {
     }
   }, [ticketTypes]);
 
-  async function selectTicket(selectedTicketType) {
+  async function toReserveTicket(selectedTicketType) {
     try {
       const insertTicket = await reserveTicket( { ticketTypeId: selectedTicketType.id }, token );
       if (insertTicket) {
@@ -44,20 +43,23 @@ export default function ChooseTicketPage() {
     }
   }
 
-  function TicketTypeBox({ ticketType }) {
+  function Ticket({ ticket }) {
     return (
       <TicketBoxHTML
-        ticketType={ticketType}
+        ticketType={ticket}
         selectedTicketType={selectedTicketType}
         onClick={() => {
-          setSelectedTicketType(ticketType); 
-          setTotal(ticketType.price);
+          setSelectedTicketType(ticket); 
+          setTotal(ticket.price);
           setIsHotelIncluded('');
+          setTypeAccomodationSelected(false);
+          if(!ticket.includesHotel) setReserveAvalible(true);
+          else setReserveAvalible(false);
         }} 
-        key={ticketType.index}
+        key={ticket.index}
       >
-        <BoxSelectionTitle>{ticketType.name}</BoxSelectionTitle>
-        <BoxSelectionPrice>R$ {ticketType.price}</BoxSelectionPrice>
+        <TicketTitle> {ticket.name} </TicketTitle>
+        <TicketPrice> R$ {ticket.price} </TicketPrice>
       </TicketBoxHTML> );
   }
 
@@ -68,51 +70,13 @@ export default function ChooseTicketPage() {
           <>
             <StyledSubTitle>
               Fechado! O total ficou em <strong>R$ {selectedTicketType.price}</strong>. Agora é só confirmar: </StyledSubTitle>
-            <Btn onClick={() => selectTicket(selectedTicketType)} >RESERVAR INGRESSO</Btn>
+            <Btn onClick={() => toReserveTicket(selectedTicketType)} >RESERVAR INGRESSO</Btn>
           </>
         ) : (
           <>
-            <StyledSubTitle>Ótimo! Agora escolha sua modalidade de hospedagem: </StyledSubTitle>
-            
-            <Container>
-              <TicketBox
-                style={{
-                  background: (isHotelIncluded === 'HOTEL_INCLUDED')? '#FFEED2' : '', 
-                  border: (isHotelIncluded === 'HOTEL_INCLUDED')? '1px solid #bcbcbc' : ''
-                }}
-                onClick={(e) => {
-                  setTotal(selectedTicketType.price + PRICE_HOTEL);
-                  setIsHotelIncluded('HOTEL_INCLUDED'); 
-                } } 
-              >
-                <BoxSelectionTitle>Com Hotel</BoxSelectionTitle>
-                <BoxSelectionPrice>+ R$ ${PRICE_HOTEL} </BoxSelectionPrice>
-              </TicketBox>
-
-              <TicketBox
-                style={{
-                  background: (isHotelIncluded === 'HOTEL_NOT_INCLUDED')? '#FFEED2' : '', 
-                  border: (isHotelIncluded === 'HOTEL_NOT_INCLUDED')? '1px solid #bcbcbc' : ''
-                }}
-                onClick={(e) => {
-                  setTotal(selectedTicketType.price);
-                  setIsHotelIncluded('HOTEL_NOT_INCLUDED');
-                  setIncludeHotel(true);
-                }}
-              >
-                <BoxSelectionTitle>Sem Hotel</BoxSelectionTitle>
-                <BoxSelectionPrice>+ R$ 0</BoxSelectionPrice>
-              </TicketBox>
-            </Container>
-            { (isHotelIncluded !== '')? 
-              ( <>
-                <StyledSubTitle>Fechado! O total ficou em <strong>R$ {total}</strong>. Agora é só confirmar: </StyledSubTitle>
-                <Btn onClick={() => selectTicket(selectedTicketType)} >RESERVAR INGRESSO</Btn>
-              </>
-              ) : (
-                <>  </> 
-              ) }
-          </>)}
+            <StyledSubTitle>Fechado! O total ficou em <strong>R$ {total}</strong>. Agora é só confirmar: </StyledSubTitle>
+            <Btn onClick={() => toReserveTicket(selectedTicketType) } > RESERVAR INGRESSO </Btn>
+          </> ) }
       </ConcludingTicketChoiceHTML>
     );
   }
@@ -122,15 +86,42 @@ export default function ChooseTicketPage() {
       <StyledTypography variant="h4">Ingresso e pagamento</StyledTypography>
       <StyledSubTitle>Primeiro, escolha sua modalidade de ingresso:</StyledSubTitle>
 
-      {ticketTypesData === undefined ? (
-        <StyledTypography variant="h2">Carregando...</StyledTypography>
-      ) : (
-        <Container>
-          {ticketTypesData.map((ticketType) => <TicketTypeBox ticketType={ticketType}/>)}
-        </Container> 
-      )}
+      {/* SELECT ONLINE OR PRESENCIAL TICKET */}
+      {(ticketTypesData != null) ? 
+        <Container> {ticketTypesData.map((ticket) => <Ticket ticket={ticket}/>)} </Container> : (<></>) }
 
-      <ConcludingTicketChoice selectedTicketType={selectedTicketType}/>
+      {/* IF TICKET GIVES OPTION OF CHOSE ACOMODATION, IT ALLOW THE USER CHOSE TO INCLUDE OR NOT THE HOTEL*/}
+      {(selectedTicketType.includesHotel === true) ? (
+        <><StyledSubTitle>Ótimo! Agora escolha sua modalidade de hospedagem: </StyledSubTitle>
+          <Container>
+            <TicketBox
+              typeAccomodation={WITH_HOTEL}
+              typeAccomodationSelected={typeAccomodationSelected}
+              onClick={(e) => {
+                setTotal( total+PRICE_HOTEL );
+                setTypeAccomodationSelected(WITH_HOTEL);
+                setReserveAvalible(true); }} 
+            >
+              <TicketTitle>Com Hotel</TicketTitle>
+              <TicketPrice>+ R$ ${PRICE_HOTEL} </TicketPrice>
+            </TicketBox>
+
+            <TicketBox
+              typeAccomodation={WITHOUT_HOTEL}
+              typeAccomodationSelected={typeAccomodationSelected}
+              onClick={(e) => {
+                setTotal(selectedTicketType.price);
+                setTypeAccomodationSelected(WITHOUT_HOTEL);
+                setReserveAvalible(true); }}
+            >
+              <TicketTitle>Sem Hotel</TicketTitle>
+              <TicketPrice>+ R$ 0</TicketPrice>
+            </TicketBox>
+          </Container> </> ) : (<></>) }
+
+      {/* IF EVERYTHING ARE SELECTED */}
+      {(reserveAvalible) ?
+        (<ConcludingTicketChoice selectedTicketType={selectedTicketType}/> ) : (<></>) }
     </>
   );
 }
@@ -171,10 +162,10 @@ const TicketBoxHTML = styled.div`
         box-shadow: 2px 0 10px 0 rgb(0 0 0 / 20%);
     }
 `;
-const BoxSelectionTitle = styled.div`
+const TicketTitle = styled.div`
   color: #454545;
 `;
-const BoxSelectionPrice = styled.div`
+const TicketPrice = styled.div`
   margin-top: 20px;
   color: #898989;
 `;
@@ -208,6 +199,10 @@ const TicketBox = styled.div`
     font-size: 16px;
     flex-direction: column;
     cursor: pointer;
+    ${({ typeAccomodation, typeAccomodationSelected }) => {
+    if(typeAccomodation === typeAccomodationSelected) {
+      return 'background: #FFEED2; border: 1px solid #bcbcbc;';
+    }}}
     :hover{
         box-shadow: 2px 0 10px 0 rgb(0 0 0 / 20%);
     }
