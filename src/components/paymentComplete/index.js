@@ -1,18 +1,16 @@
 import Typography from '@material-ui/core/Typography';
 import styled from 'styled-components';
 import { StyledSubTitle } from './subTitle';
-import { StyledTicket } from './ticketContainer';
 import { IoCheckmarkCircleSharp } from 'react-icons/io5/';
+import { useEffect } from 'react';
 
-export default function PaymentCompletePage({ ticketName, ticketPrice }) {
+export default function PaymentCompletePage() {
+  useEffect(() => {
+
+  }, []);
+  
   return (
     <>
-      <StyledTypography variant="h4">Ingresso e pagamento</StyledTypography>
-      <StyledSubTitle>Ingresso escolhido</StyledSubTitle>
-      <StyledTicket>
-        <h6>{ticketName}</h6>
-        <p>R$ {ticketPrice/100} </p>
-      </StyledTicket>
       <StyledSubTitle>Pagamento</StyledSubTitle>
       <StyledPaymentConfirmed>
         <StyledCheckMark/>

@@ -4,7 +4,7 @@ import useGetTicket from '../../../hooks/api/useTicket';
 import PaymentCompletePage from '../../../components/paymentComplete';
 import ErrorPage from '../../../components/CannotChooseTicket';
 import CreditCardPage from '../../../components/ticketReserved';
-import ChooseTicketPage from '../../../components/chooseTicket';
+import ChooseTicketComponent from '../../../components/chooseTicket';
 import { useState } from 'react';
 
 export default function Payment() {
@@ -14,6 +14,8 @@ export default function Payment() {
   const [paymentCompleteBoolean, setPaymentCompleteBoolean] = useState(false);
   const [creditCardBoolean, setCreditCardBoolean] = useState(false);
   const [buyTicketBoolean, setBuyTicketBoolean] = useState(false);
+
+  const ticketData = JSON.parse(window.sessionStorage.getItem('ticketData'));
 
   useEffect(() => {
     if(enrollment && !ticket) setBuyTicketBoolean(true);
@@ -25,32 +27,34 @@ export default function Payment() {
         setCreditCardBoolean(true);
       }
     }
-  }, [ticket, enrollment]);
-
-  if(paymentCompleteBoolean === true) {
-    return (
-      <PaymentCompletePage 
-        ticketName={ticketComplete.TicketType.name}
-        ticketPrice={ticketComplete.TicketType.price}
-      />
-    );
-  }
-
-  if(creditCardBoolean === true) {
+  }, [ticket, enrollment, ticketData]);
+  
+  function CreditCard() {
     return (
       <CreditCardPage
         ticketName={ticketComplete.TicketType.name} 
         ticketPrice={ticketComplete.TicketType.price} 
         ticketId={ticketComplete.id} 
         setPaymentCompleteBoolean={setPaymentCompleteBoolean}
-      /> );
-  }
+      /> ); }
 
-  if(buyTicketBoolean === true) {
-    return <ChooseTicketPage />;
+  function PaymentSection() {
+    return (
+      <PaymentCompletePage 
+        ticketName={ticketData.category}
+        ticketPrice={ticketData.price}
+      /> ); }
+    
+  function TicketSection() {
+    return <ChooseTicketComponent ticketReserved={ticket}/>;
   }
 
   return (
-    <ErrorPage message1={'Você precisa completar sua inscrição'} message2={'antes de prosseguir pra escolha de ingresso'}/>
+    <>
+      <TicketSection/>
+      {(ticket) ? <PaymentSection/> : <></>}
+
+      {/* {(creditCardBoolean) ? <CreditCard/> : (<></>) } */}
+    </>
   );
 }
